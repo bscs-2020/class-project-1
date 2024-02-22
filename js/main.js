@@ -1,16 +1,16 @@
 $(document).ready(() => {
-    let map = $('#map');
-    let regions = map.children();
+    let map = $('#map-svg');
 
+    let regions = map.children();
+    console.log(regions);
     regions.hover(
         // mouseenter
         function () {
-
             $(this).appendTo(map);
         },
         // mouseleave
         function () {
-
+            //$(this).tooltip('disable');
         });
 
     let regionModal = $('#region-wrapper');
@@ -19,7 +19,7 @@ $(document).ready(() => {
     regions.click(function () {
         let region = $(this)
         regionImage.html(regionSvg[region.attr('id')]);
-
+        
         let regionName = '';
         let tempRegionName = region.attr('id').toString().split('-');
         console.log(tempRegionName);
@@ -28,23 +28,31 @@ $(document).ready(() => {
         } else {
             regionName = tempRegionName[0].toUpperCase();
         }
-        $('#region-details h2').html('');
+        let tempRegionData = regionData.find( r => r.region == regionName);
+        console.log(tempRegionData);
+        $('#region-description').html(tempRegionData["short-info"]);
+        $('#population').html(`<strong>Population</strong>: ${tempRegionData["population"]}`);
+        $('#land-area').html(`<strong>Land Area (sqm)</strong>: ${tempRegionData["land-area"]}`);
+        $('#languages').html(`<strong>Languages Spoken</strong>: ${tempRegionData["languages-spoken"]}`);
+        $('#population-distribution').html(`<strong>Population Distribution by Language</strong>: ${tempRegionData["population-distribution"]}`);
+        $('#dialects').html(`<strong>Major Dialects</strong>: ${tempRegionData["major-dialects"]}`);
+        $('#resources').html(`<strong>Language Resources</strong>: ${tempRegionData["language-resources"]}`);
         $('#region-details h1').html(regionName);
         let provinces = regionImage.children().children().children();
-        provinces.each(function() {
+        provinces.each(function () {
             let province = $(this);
             console.log(province);
             province.css('fill', 'grey');
             province.hover(function () {
                 $(this).appendTo(regionImage.children().children());
                 $(this).css('fill', regionFill[region.attr('id')]);
-            }, 
-            function() {
-                if (!$(this).hasClass('selected')) $(this).css('fill', 'grey');
-            });
+            },
+                function () {
+                    if (!$(this).hasClass('selected')) $(this).css('fill', 'grey');
+                });
 
             province.click(function () {
-                provinces.each(function() {
+                provinces.each(function () {
                     $(this).removeClass('selected');
                     $(this).css('fill', 'grey');
                 });
@@ -55,10 +63,7 @@ $(document).ready(() => {
                 let tempProvinceName = $(this).attr('id').split('-');
                 for (i = 0; i < tempProvinceName.length; i++) {
                     tempProvinceName[i] = capitalizeFirstLetter(tempProvinceName[i]);
-                    console.log(capitalizeFirstLetter(tempProvinceName[i]));
                 }
-
-                console.log(tempProvinceName);
 
                 provinceName = tempProvinceName.join(' ');
 
@@ -119,4 +124,27 @@ const regionSvg = {
 
 function capitalizeFirstLetter(word) {
     return word.charAt(0).toUpperCase() + word.slice(1);
-  }
+}
+
+window.smoothScroll = function(target) {
+    var scrollContainer = target;
+    do { //find scroll container
+        scrollContainer = scrollContainer.parentNode;
+        if (!scrollContainer) return;
+        scrollContainer.scrollTop += 1;
+    } while (scrollContainer.scrollTop == 0);
+
+    var targetY = 0;
+    do { //find the top of target relatively to the container
+        if (target == scrollContainer) break;
+        targetY += target.offsetTop;
+    } while (target = target.offsetParent);
+
+    scroll = function(c, a, b, i) {
+        i++; if (i > 30) return;
+        c.scrollTop = a + (b - a) / 30 * i;
+        setTimeout(function(){ scroll(c, a, b, i); }, 20);
+    }
+    // start scrolling
+    scroll(scrollContainer, scrollContainer.scrollTop, targetY, 0);
+}

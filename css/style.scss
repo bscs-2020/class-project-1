@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap");
+
 /* Reset */
 * {
   box-sizing: border-box;
@@ -12,16 +14,115 @@ html {
   width: 100%;
   font-family: "Roboto Mono", monospace;
   overflow: hidden;
+  scroll-behavior: smooth;
 }
 
 html,
 body {
   height: auto;
   min-height: 100%;
+  background-color: #fffee1;
+}
+
+#home {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height:100%;
+  width: 100%;
+  transform-style: preserve-3d;
+  z-index: -1;
+}
+
+#home-wrap {
+  width: 100%;
+  padding: 0 10rem;
+}
+
+#map {
+  padding: 5rem 0;
+  background-color: #FFFEE1;
+}
+
+.home-image {
+  position: fixed;
+  height: 100%;
+  width: 100vw;
+  object-fit: cover;
+  transform: translateZ(-10px) scale(2);
+  transform-origin: bottom center;
+  opacity: 10%;
+}
+
+#start {
+  cursor: pointer;
+  margin-top: 5rem;
+  padding: 2rem 7rem;
+  background-color: #173f2a;
+  color: #fffee1;
+  border: none;
+  border-radius: 5rem;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.center {
+  margin: auto;
+  width: 90%;
+  //border: 3px solid green;
+  padding: 10px;
+  position: relative;
+
+  h1,
+  h2 {
+    position: absolute;
+    margin: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+section {
+  height: 100vh;
+  width: 100%;
+}
+
+#wrapper {
+  height: 100vh;
+  overflow-y: overlay;
+  overflow-x: hidden;
+  perspective: 10px;
+  -webkit-font-smoothing: antialiased;
+  perspective-origin: bottom center;
+  background-color: #002a0e;
+  color: #fffee1;
+  scroll-behavior: smooth;
+
+  h1 {
+    font-size: 8rem;
+    font-weight: bold;
+  }
+
+  h2 {
+    font-size: 3rem;
+    font-weight: normal;
+  }
 }
 
 footer {
   display: none;
+  width: 100%;
+  //height: 100%;
+  text-align: center;
+  border-top: 2px solid black;
+  padding: 1rem 0;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  p {
+    font-size: 1.4rem;
+  }
 }
 
 .close {
@@ -38,14 +139,47 @@ footer {
   cursor: pointer;
 }
 
-#map-wrapper {
-  height: 100vh;
-  width: 100vw;
-  align-items: center;
-  position: absolute;
+#tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
 }
 
-#map {
+#tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+
+  /* Position the tooltip text */
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+
+  /* Fade in tooltip */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+#tooltip:hover #tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+#map-wrapper {
+  display: flex;
+  width: 100vw;
+  height: 95vh;
+  align-items: center;
+  position: relative;
+}
+
+#map-svg {
   height: 100%;
   width: 100%;
   display: block;
@@ -82,7 +216,8 @@ footer {
       transform-box: fill-box;
     }
 
-    path:hover, .selected {
+    path:hover,
+    .selected {
       stroke: white;
       stroke-width: 2;
       z-index: 1 !important;
@@ -102,9 +237,20 @@ footer {
   background-color: white;
   display: none;
   z-index: 1;
-  position: absolute;
+  position: fixed;
+  left: 0;
+  top: 0;
   height: 100vh;
   width: 100vw;
+  z-index: 9998;
+  overflow: auto;
+  h1 {
+    font-size: 4rem;
+  }
+  p {
+    font-weight: normal;
+    margin-bottom: 2rem;
+  }
 }
 
 #region-content {
@@ -135,91 +281,91 @@ footer {
 
 #region-xiii {
   &:hover path {
-    fill: #019ec7;
+    fill: #dcccff;
   }
 }
 
 #region-xii {
   &:hover path {
-    fill: #019ec7;
+    fill: #e6ccfb;
   }
 }
 
 #region-xi {
   &:hover path {
-    fill: #f874ab;
+    fill: #c1ccfb;
   }
 }
 
 #region-x {
   &:hover path {
-    fill: #e7b98b;
+    fill: #9cccfa;
   }
 }
 
 #region-ix {
   &:hover path {
-    fill: #69b21a;
+    fill: #78cce9;
   }
 }
 
 #region-viii {
   &:hover path {
-    fill: #fedd56;
+    fill: #53ccd9;
   }
 }
 
 #region-vii {
   &:hover path {
-    fill: #f774ab;
+    fill: #2bccc7;
   }
 }
 
 #region-vi {
   &:hover path {
-    fill: #cacdfd;
+    fill: #00ccb3;
   }
 }
 
 #region-v {
   &:hover path {
-    fill: #03af4e;
+    fill: #00cca2;
   }
 }
 
 #region-ivb {
   &:hover path {
-    fill: #e7b88a;
+    fill: #00cc91;
   }
 }
 
 #region-iva {
   &:hover path {
-    fill: #fefe40;
+    fill: #00cc80;
   }
 }
 
 #region-iii {
   &:hover path {
-    fill: #fdaffe;
+    fill: #00cc6f;
   }
 }
 
 #region-ii {
   &:hover path {
-    fill: #019fc4;
+    fill: #00cc5e;
   }
 }
 
 #region-i {
   &:hover path {
-    fill: #fe9801;
+    fill: #00cc4d;
   }
 }
 
 #armm {
   &:hover path {
-    fill: #ffdf57;
+    fill: #c7ccf4;
   }
 }
 
@@ -235,12 +381,12 @@ footer {
     z-index: 1 !important;
     transform: scale(1.5);
     pointer-events: auto;
-    fill: #73c01c;
+    fill: #b0cce2;
   }
 }
 
 #car {
   &:hover path {
-    fill: #72bc1f;
+    fill: #99ccd1;
   }
 }
