@@ -31,14 +31,26 @@ $(document).ready(() => {
             regionName = tempRegionName[0].toUpperCase();
         }
         let tempRegionData = regionData.find( r => r.region == regionName);
-        console.log(tempRegionData);
+
         let languages = tempRegionData["languages-spoken"];
-        languages = languages.replace(' ','').split(',');
+        languages = languages.split(',');
         for (let i = 0; i < languages.length; i++) {
-            languages[i] = `<span class="language-box" style="background-color: ${languageColors[i]}">${languages[i]}</span>`;
+            languages[i] = `<span class="language-box" style="background-color: ${languageColors[i]}">${languages[i].trim()}</span>`;
         }
         languages = languages.join('');
-        console.log(languages);
+
+        let languageBars = tempRegionData["population-distribution"].split(',');
+        console.log(languageBars);
+        for (let i = 0; i < languageBars.length; i++) {
+            let x = languageBars[i].split(':');
+            let language = x[0].trim();
+            let percentage = x[1].trim();
+            console.log(`Language: ${language}, Percentage: ${percentage}`);
+            languageBars[i] = `<span class="bar-container"><span class="language-bar" style="background-color: ${languageColors[i]}; min-width: ${percentage}"><span class="language-name">${language}</span><span class="language-percentage">${percentage}</span></span></span>`
+        }
+        languageBars = languageBars.join('');
+        console.log(languageBars);
+
         modalDetails.append(`<div class="modal-detail"><p class="detail-name">Primary Languages<p class="detail-content">${languages}</p></div>`);
         // append image
         modalDetails.append(`<img src="res/images/background.png" alt=""/>`);
@@ -48,7 +60,7 @@ $(document).ready(() => {
         modalDetails.append(`<div class="modal-detail"><p class="detail-name">Land Area (sqm)</p><p class="detail-content">${tempRegionData["land-area"]}</p></div>`);
         modalDetails.append(`<div class="modal-detail"><p class="detail-name">Major Dialects</p><p class="detail-content">${tempRegionData["major-dialects"]}</p></div>`);
         modalDetails.append('<hr />');
-        modalDetails.append(`<div class="modal-detail"><p class="detail-name">Population Distribution by Language</p><p class="detail-content">${tempRegionData["population-distribution"]}</p></div>`);
+        modalDetails.append(`<div class="modal-detail column"><p class="detail-name full-width bottom-2-rem">Population Distribution by Language</p><p class="detail-content full-width">${languageBars}</p></div>`);
         modalDetails.append('<hr />');
         modalDetails.append(`<div class="modal-detail"><p class="detail-name">Language Resources</p><p class="detail-content">${tempRegionData["language-resources"]}</p></div>`);
         $('#modal-left h1').html(regionName);
