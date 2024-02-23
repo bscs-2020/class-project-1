@@ -1,4 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap");
+@font-face {
+  font-family: "SF Pro Display";
+  src: url(res\f ontsSF-Pro-Display-Regular.otf) format("opentype");
+}
 /* Reset */
 * {
   box-sizing: border-box;
@@ -11,7 +15,7 @@ html {
   background-color: white;
   font-size: 10px;
   width: 100%;
-  font-family: "Roboto Mono", monospace;
+  font-family: "SF Pro Display";
   overflow: hidden;
   scroll-behavior: smooth;
 }
@@ -21,6 +25,35 @@ body {
   height: auto;
   min-height: 100%;
   background-color: #fffee1;
+}
+
+.bold {
+  font-size: bold;
+}
+
+.modal-detail {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.detail-name {
+  font-weight: bold;
+  width: 30%;
+}
+
+.detail-content {
+  font-weight: normal;
+  width: 70%;
+  text-align: right;
+}
+
+.text-left {
+  float: left;
+}
+
+.text-right {
+  float: right;
 }
 
 #home {
@@ -121,10 +154,18 @@ footer p {
 }
 
 .close {
-  color: #aaa;
+  color: white;
   float: right;
   font-size: 28px;
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  line-height: 28px;
   font-weight: bold;
+  flex-grow: 0;
+  background-color: black;
+  border-radius: 50px;
+  font-weight: 300;
 }
 
 .close:hover,
@@ -132,36 +173,6 @@ footer p {
   color: black;
   text-decoration: none;
   cursor: pointer;
-}
-
-#tooltip {
-  position: relative;
-  display: inline-block;
-  border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
-}
-
-#tooltiptext {
-  visibility: hidden;
-  width: 120px;
-  background-color: #555;
-  color: #fff;
-  text-align: center;
-  padding: 5px 0;
-  border-radius: 6px;
-  /* Position the tooltip text */
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -60px;
-  /* Fade in tooltip */
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-#tooltip:hover #tooltiptext {
-  visibility: visible;
-  opacity: 1;
 }
 
 #map-wrapper {
@@ -192,38 +203,8 @@ footer p {
   pointer-events: auto;
 }
 
-#region-image {
-  display: block;
-  height: 100%;
-  width: 40%;
-}
-#region-image svg {
-  height: 100%;
-  width: 100%;
-}
-#region-image svg path {
-  stroke-width: 0.5;
-  stroke-linejoin: round;
-  transition: all 0.5s;
-  transform-origin: 50% 50%;
-  transform-box: fill-box;
-}
-#region-image svg path:hover,
-#region-image svg .selected {
-  stroke: white;
-  stroke-width: 2;
-  z-index: 1 !important;
-  transform: scale(1.05);
-  pointer-events: auto;
-}
-#region-image svg #ncr:hover {
-  stroke-width: 0.5;
-  transform: none !important;
-}
-
-#region-wrapper {
+#modal-wrapper {
   padding: 5rem;
-  background-color: white;
   display: none;
   z-index: 1;
   position: fixed;
@@ -232,38 +213,94 @@ footer p {
   height: 100vh;
   width: 100vw;
   z-index: 9998;
-  overflow: auto;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.1); /* Black w/ opacity */
+  position: fixed;
+  justify-content: center;
 }
-#region-wrapper h1 {
+#modal-wrapper h1 {
   font-size: 4rem;
 }
-#region-wrapper p {
-  font-weight: normal;
-  margin-bottom: 2rem;
+
+#modal-content {
+  background-color: white;
+  display: flex;
+  padding: 5rem;
+  height: 100%;
+  width: 60%;
+  border-radius: 30px;
+  filter: drop-shadow(0px 0px 8px #000000);
 }
 
-#region-content {
+#modal-left {
   display: flex;
+  flex-flow: column;
   height: 100%;
+  width: 50%;
+  position: relative;
+}
+#modal-left h1, #modal-left h2 {
+  text-align: center;
+}
+#modal-left h1 {
+  font-size: 4rem;
+}
+#modal-left h2 {
+  font-size: 3rem;
+  font-weight: 400;
+  font-style: italic;
+}
+
+#modal-right {
+  height: 100%;
+  width: 50%;
+}
+
+#modal-details {
+  padding: 2rem;
+  height: 100%;
+  width: 100%;
+  font-weight: bold;
+  font-size: 2rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+#modal-details img {
+  border-radius: 30px;
   width: 100%;
 }
 
-#region-header {
-  margin: auto;
-  text-align: center;
-  font-size: 5rem;
-}
-
-#region-details {
-  padding: 2rem;
+#modal-image {
+  position: absolute;
+  display: flex;
+  flex: auto;
+  align-items: center;
   height: 100%;
-  width: 60%;
-  font-weight: bold;
-  font-size: 2rem;
+  width: 100%;
 }
-
-#province-wrapper {
-  display: none;
+#modal-image svg {
+  margin: auto;
+  height: 70%;
+  width: 85%;
+}
+#modal-image svg path {
+  stroke-width: 0.5;
+  stroke-linejoin: round;
+  transition: all 0.5s;
+  transform-origin: 50% 50%;
+  transform-box: fill-box;
+}
+#modal-image svg path:hover,
+#modal-image svg .selected {
+  stroke: white;
+  stroke-width: 2;
+  z-index: 1 !important;
+  transform: scale(1.05);
+  pointer-events: auto;
+}
+#modal-image svg #ncr:hover {
+  stroke-width: 0.5;
+  transform: none !important;
 }
 
 #region-xiii:hover path {
