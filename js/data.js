@@ -1,3 +1,21 @@
+const languageColors = [
+  "#3498db", // Blue
+  "#e74c3c", // Red
+  "#2ecc71", // Green
+  "#9b59b6", // Purple
+  "#f39c12", // Orange
+  "#1abc9c", // Turquoise
+  "#e67e22", // Brown
+  "#6a1b9a", // Dark Purple
+  "#d35400", // Rust
+  "#27ae60", // Forest Green
+  "#8e44ad", // Violet
+  "#c0392b", // Dark Red
+  "#16a085", // Dark Cyan
+  "#f1c40f", // Yellow
+  "#34495e", // Midnight Blue
+];
+
 const regionData = [
     {
       "region": "CAR",

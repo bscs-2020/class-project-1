@@ -32,7 +32,14 @@ $(document).ready(() => {
         }
         let tempRegionData = regionData.find( r => r.region == regionName);
         console.log(tempRegionData);
-        modalDetails.append(`<div class="modal-detail"><p class="detail-name">Primary Languages<p class="detail-content">${tempRegionData["languages-spoken"]}</p></div>`);
+        let languages = tempRegionData["languages-spoken"];
+        languages = languages.replace(' ','').split(',');
+        for (let i = 0; i < languages.length; i++) {
+            languages[i] = `<span class="language-box" style="background-color: ${languageColors[i]}">${languages[i]}</span>`;
+        }
+        languages = languages.join('');
+        console.log(languages);
+        modalDetails.append(`<div class="modal-detail"><p class="detail-name">Primary Languages<p class="detail-content">${languages}</p></div>`);
         // append image
         modalDetails.append(`<img src="res/images/background.png" alt=""/>`);
         modalDetails.append(`<div class="modal-detail"><p class="detail-name">Short Info</p><p class="detail-content">${tempRegionData["short-info"]}</p></div>`);

@@ -42,13 +42,27 @@ body {
 
 .detail-name {
  font-weight: bold;
- width: 30%;
+ min-width: 30%;
+ max-width: 50%;
 }
 
 .detail-content {
  font-weight: normal;
- width: 70%;
+ min-width: 50%;
+ max-width: 70%;
  text-align: right;
+}
+
+.language-box {
+  font-size: 1.5rem;
+  text-align: center;
+  padding: 0.5rem;
+  margin-left: 5rem;
+  margin-bottom: 1rem;
+  display: block;
+  border-radius: 10px;
+  font-weight: bold;
+  filter: drop-shadow(0px 0px 8px rgba(0,0,0,0.4));
 }
 
 .text-left {
@@ -213,6 +227,7 @@ footer {
 #modal-wrapper {
   padding: 5rem;
   display: none;
+  flex-direction: column;
   z-index: 1;
   position: fixed;
   left: 0;
@@ -224,6 +239,7 @@ footer {
   background-color: rgba(0,0,0,0.1); /* Black w/ opacity */
   position: fixed;
   justify-content: center;
+  align-items: center;
   h1 {
     font-size: 4rem;
   }
@@ -232,11 +248,23 @@ footer {
 #modal-content {
   background-color: white;
   display: flex;
+  flex-direction: column;
   padding: 5rem;
+  padding-right: 0rem;
   height: 100%;
   width: 60%;
   border-radius: 30px;
-  filter: drop-shadow(0px 0px 8px #000000);
+  filter: drop-shadow(0px 0px 8px rgba(0,0,0,0.4));
+}
+
+#top-content {
+  padding-right: 5rem;
+}
+
+#bottom-content {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
 }
 
 #modal-left {
@@ -263,10 +291,14 @@ footer {
 #modal-right {
   height: 100%;
   width: 50%;
+  hr {
+    margin-bottom: 2rem;
+  }
 }
 
 #modal-details {
   padding: 2rem;
+  padding-right: 5rem;
   // background-color: blue;
   height: 100%;
   width: 100%;
@@ -275,6 +307,7 @@ footer {
   overflow-y: scroll;
   overflow-x: hidden;
   img {
+    margin-bottom: 2rem;
     border-radius: 30px;
     width: 100%;
   }
