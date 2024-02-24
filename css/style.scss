@@ -1,10 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap");
 
 @font-face {
-  font-family: 'SF Pro Display';
-  src: url(res\fonts\SF-Pro-Display-Regular.otf) format('opentype');
+  font-family: "SF Pro Display";
+  src: url(../res/fonts/SF-Pro-Display-Regular.otf) format("opentype");
 }
-
 
 /* Reset */
 * {
@@ -18,7 +17,7 @@ html {
   background-color: white;
   font-size: 10px;
   width: 100%;
-  font-family: 'SF Pro Display';
+  font-family: "SF Pro Display";
   overflow: hidden;
   scroll-behavior: smooth;
 }
@@ -28,6 +27,16 @@ body {
   height: auto;
   min-height: 100%;
   background-color: #fffee1;
+}
+
+.marker {
+  height: 32px;
+  position: absolute;
+  z-index: 9999;
+  transform: translate(
+    -50%,
+    -100%
+  ); /* Center the marker on the clicked point */
 }
 
 .bold {
@@ -49,9 +58,9 @@ body {
 }
 
 .detail-name {
- font-weight: bold;
- min-width: 30%;
- max-width: 50%;
+  font-weight: bold;
+  min-width: 30%;
+  max-width: 50%;
 }
 
 .detail-name-large {
@@ -59,24 +68,24 @@ body {
   font-size: 3rem;
   min-width: 30%;
   max-width: 50%;
- }
+}
 
 .bottom-2-rem {
   margin-bottom: 2rem;
 }
 
 .detail-content {
- font-weight: normal;
- min-width: 50%;
- max-width: 70%;
- text-align: right;
+  font-weight: normal;
+  min-width: 50%;
+  max-width: 70%;
+  text-align: right;
 }
 
 .detail-content-only {
   font-weight: normal;
   width: 100%;
   text-align: left;
- }
+}
 // .language-box-container {
 //   margin-top: 1rem;
 //   display: flex;
@@ -84,7 +93,7 @@ body {
 // }
 
 .language-box {
-  background-color: #002A0E;
+  background-color: #002a0e;
   color: #ffffff;
   font-size: 1.5rem;
   text-align: center;
@@ -95,7 +104,7 @@ body {
   display: inline-block;
   border-radius: 10px;
   font-weight: normal;
-  filter: drop-shadow(0px 0px 8px rgba(0,0,0,0.4));
+  filter: drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.4));
 }
 
 .bar-container {
@@ -123,7 +132,8 @@ body {
   text-align: right;
 }
 
-.language-name, .language-percentage {
+.language-name,
+.language-percentage {
   float: left;
   font-size: 1.3rem;
 }
@@ -141,7 +151,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height:100%;
+  height: 100%;
   width: 100%;
   transform-style: preserve-3d;
   z-index: -1;
@@ -154,7 +164,7 @@ body {
 
 #map {
   padding: 5rem 0;
-  background-color: #FFFEE1;
+  background-color: #fffee1;
 }
 
 .home-image {
@@ -289,7 +299,7 @@ footer {
   width: 100vw;
   z-index: 9998;
   overflow: hidden;
-  background-color: rgba(0,0,0,0.1); /* Black w/ opacity */
+  background-color: rgba(0, 0, 0, 0.1); /* Black w/ opacity */
   position: fixed;
   justify-content: center;
   align-items: center;
@@ -308,7 +318,7 @@ footer {
   height: 100%;
   width: 90%;
   border-radius: 30px;
-  filter: drop-shadow(0px 0px 8px rgba(0,0,0,0.4));
+  filter: drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.4));
 }
 
 #top-content {
@@ -344,23 +354,24 @@ footer {
 #footer-close {
   border-color: rgba(0, 42, 14, 1);
   background: white;
-  color: #002A0E;
+  color: #002a0e;
 
   &:hover {
-    background: #002A0E;
+    background: #002a0e;
     color: white;
   }
 }
 
-#back, #next {
+#back,
+#next {
   border: none;
-  
-  background: #002A0E;
+
+  background: #002a0e;
   color: white;
 
   &:hover {
     border: 2px solid rgba(0, 42, 14, 1);
-    color: #002A0E;
+    color: #002a0e;
     background: white;
     //transition: 0.5s;
   }
@@ -375,7 +386,8 @@ footer {
   position: relative;
   //align-items: center;
   //padding: 10rem 0;
-  h1, h2 {
+  h1,
+  h2 {
     text-align: center;
   }
   h1 {
@@ -399,7 +411,7 @@ footer {
 }
 
 #modal-details {
-  background: #F3FFEC;
+  background: #f3ffec;
   border-radius: 50px;
   padding: 8rem;
   //margin-right: 5rem;
@@ -410,7 +422,7 @@ footer {
   font-size: 2rem;
   overflow-y: scroll;
   overflow-x: hidden;
-  filter: drop-shadow(0px 0px 8px rgba(0,0,0,0.4));
+  filter: drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.4));
   img {
     margin-bottom: 2rem;
     border-radius: 30px;
@@ -454,7 +466,6 @@ footer {
     }
   }
 }
-
 
 #region-xiii {
   &:hover path {

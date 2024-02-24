@@ -90,6 +90,7 @@ const regionSvg = {
 };
 
 function updateModal(modalWrapper, modalImage, modalDetails, region) {
+    $('.marker').remove();
     modalDetails.html('');
     modalImage.html(regionSvg[region.attr('id')]);
 
@@ -147,7 +148,23 @@ function updateModal(modalWrapper, modalImage, modalDetails, region) {
                 if (!$(this).hasClass('selected')) $(this).css('fill', 'grey');
             });
 
-        province.click(function () {
+        province.click(function (event) {
+            // Add marker
+            $('.marker').css('display', 'none');
+            let grandparentOffset = $(this).parent().parent().parent().offset();
+            var x = event.pageX - grandparentOffset.left;
+            var y = event.pageY - grandparentOffset.top;
+
+            let marker = $("<img src='res/images/pin.png' class='marker'>");
+            // Set the marker position
+            marker.css({
+                left: x,
+                top: y
+            });
+
+            $('#modal-left').prepend(marker);
+
+            modalDetails.html('');
             provinces.each(function () {
                 $(this).removeClass('selected');
                 $(this).css('fill', 'grey');
@@ -163,10 +180,64 @@ function updateModal(modalWrapper, modalImage, modalDetails, region) {
 
             provinceName = tempProvinceName.join(' ');
 
+            let tempProvinceData = provinceData.find(p => p.province == provinceName);
+            console.log(tempProvinceData);
+
+            languages = tempProvinceData["languages"];
+            languages = languages.split(',');
+            for (let i = 0; i < languages.length; i++) {
+                languages[i] = `<span class="language-box">${languages[i].trim()}</span>`;
+            }
+            languages = languages.join('');
+
+            languageBars = tempProvinceData["population-distribution"].split(',');
+
+            for (let i = 0; i < languageBars.length; i++) {
+                let x = languageBars[i].split(':');
+                let language = x[0].trim();
+                let percentage = x[1].trim();
+
+                languageBars[i] = `<span class="bar-container"><span class="language-bar" style="background-color: ${languageColors[i]}; min-width: ${percentage}"><span class="language-name">${language}</span><span class="language-percentage">${percentage}</span></span></span>`
+            }
+            languageBars = languageBars.join('');
+
+            modalDetails.append(`<img src="res/images/background.png" alt=""/>`);
+            modalDetails.append(`<div class="modal-detail"><p class="detail-content-only">${tempProvinceData["short-info"]}</p></div>`);
+            modalDetails.append(`<div class="modal-detail"><p class="detail-name-large">Primary Languages<p class="detail-content">${languages}</p></div>`);
+            // modalDetails.append('<hr />');
+            modalDetails.append(`<div class="modal-detail"><p class="detail-name">Population</p><p class="detail-content">${tempProvinceData["population"]}</p></div>`);
+            modalDetails.append(`<div class="modal-detail"><p class="detail-name">Land Area (sqm)</p><p class="detail-content">${tempProvinceData["land-area"]}</p></div>`);
+            modalDetails.append(`<div class="modal-detail"><p class="detail-name">Popular Literature</p><p class="detail-content">${tempProvinceData["popular-literature"]}</p></div>`);
+            modalDetails.append(`<div class="modal-detail"><p class="detail-name">Full Address of Popular Literature</p><p class="detail-content">${tempProvinceData["lit-address"]}</p></div>`);
+            //modalDetails.append(`<div class="modal-detail"><p class="detail-name">Major Dialects</p><p class="detail-content">${tempProvinceData["major-dialects"]}</p></div>`);
+            // modalDetails.append('<hr />');
+            modalDetails.append(`<div class="modal-detail column"><p class="detail-name full-width bottom-2-rem align-center">Population Distribution by Language</p><p class="detail-content full-width">${languageBars}</p></div>`);
+            // modalDetails.append('<hr />');
+            // modalDetails.append(`<div class="modal-detail"><p class="detail-name">Language Resources</p><p class="detail-content">${tempProvinceData["language-resources"]}</p></div>`);
+
             $('#modal-left h2').html(provinceName);
         })
     });
     modalWrapper.css('display', 'flex');
+}
+
+function showMarker(province) {
+    // Remove existing markers
+    $('.marker').remove();
+
+    // Get the clicked region
+    var clickedProvince = $(`#modal-image svg #${province.attr('id')}`);
+    console.log(clickedProvince[0].getBoundingClientRect());
+    // Create a marker
+    let marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    marker.setAttribute('cx', clickedProvince[0].getBoundingClientRect().x + clickedProvince[0].getBoundingClientRect().width / 2);
+    marker.setAttribute('cy', clickedProvince[0].getBoundingClientRect().y + clickedProvince[0].getBoundingClientRect().height / 2);
+    marker.setAttribute('r', 10);
+    marker.setAttribute('fill', 'red');
+    marker.setAttribute('class', 'marker');
+
+    // Append the marker to the SVG
+    $('#modal-image svg').prepend(marker);
 }
 
 function capitalizeFirstLetter(word) {

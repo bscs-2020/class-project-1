@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap");
 @font-face {
   font-family: "SF Pro Display";
-  src: url(res\f ontsSF-Pro-Display-Regular.otf) format("opentype");
+  src: url(../res/fonts/SF-Pro-Display-Regular.otf) format("opentype");
 }
 /* Reset */
 * {
@@ -25,6 +25,13 @@ body {
   height: auto;
   min-height: 100%;
   background-color: #fffee1;
+}
+
+.marker {
+  height: 32px;
+  position: absolute;
+  z-index: 9999;
+  transform: translate(-50%, -100%); /* Center the marker on the clicked point */
 }
 
 .bold {
@@ -76,7 +83,7 @@ body {
 }
 
 .language-box {
-  background-color: #002A0E;
+  background-color: #002a0e;
   color: #ffffff;
   font-size: 1.5rem;
   text-align: center;
@@ -113,7 +120,8 @@ body {
   text-align: right;
 }
 
-.language-name, .language-percentage {
+.language-name,
+.language-percentage {
   float: left;
   font-size: 1.3rem;
 }
@@ -144,7 +152,7 @@ body {
 
 #map {
   padding: 5rem 0;
-  background-color: #FFFEE1;
+  background-color: #fffee1;
 }
 
 .home-image {
@@ -329,21 +337,23 @@ footer p {
 #footer-close {
   border-color: rgb(0, 42, 14);
   background: white;
-  color: #002A0E;
+  color: #002a0e;
 }
 #footer-close:hover {
-  background: #002A0E;
+  background: #002a0e;
   color: white;
 }
 
-#back, #next {
+#back,
+#next {
   border: none;
-  background: #002A0E;
+  background: #002a0e;
   color: white;
 }
-#back:hover, #next:hover {
+#back:hover,
+#next:hover {
   border: 2px solid rgb(0, 42, 14);
-  color: #002A0E;
+  color: #002a0e;
   background: white;
 }
 
@@ -354,7 +364,8 @@ footer p {
   width: 50%;
   position: relative;
 }
-#modal-left h1, #modal-left h2 {
+#modal-left h1,
+#modal-left h2 {
   text-align: center;
 }
 #modal-left h1 {
@@ -375,7 +386,7 @@ footer p {
 }
 
 #modal-details {
-  background: #F3FFEC;
+  background: #f3ffec;
   border-radius: 50px;
   padding: 8rem;
   height: 100%;
