@@ -44,6 +44,15 @@ $(document).ready(() => {
     $('#footer-close').click(() => {
         modalWrapper.css('display', 'none');
     });
+
+    // Close modal if #modal-wrapper is clicked
+    modalWrapper.click((event) => {
+    // Check if the clicked element is #modal-wrapper or its children
+    if (event.target.id === 'modal-wrapper') {
+        modalWrapper.css('display', 'none');
+    }
+});
+
 });
 
 // TODO: add indicator which region or province is hovered
