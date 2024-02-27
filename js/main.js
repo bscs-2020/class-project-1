@@ -16,6 +16,7 @@ $(document).ready(() => {
 
 
     let modalWrapper = $('#modal-wrapper');
+    let modalContent = $('#modal-content');
     let modalImage = $('#modal-image');
     let modalCloseButton = $('#modal-wrapper .modal-close');
     let modalDetails = $('#modal-details');
@@ -44,9 +45,26 @@ $(document).ready(() => {
     $('#footer-close').click(() => {
         modalWrapper.css('display', 'none');
     });
-});
+    let maximizeModal = $('#maximize-modal');
+    let minimizeModal = $('#minimize-modal');
+    maximizeModal.click(() => {
+        maximizeModal.css('display', 'none');
+        minimizeModal.css('display', 'inline');
 
-// TODO: add indicator which region or province is hovered
+        modalWrapper.css('padding', '0');
+        modalContent.css('width', '100%');
+        modalContent.css('border-radius', '0');
+    });
+
+    minimizeModal.click(() => {
+        maximizeModal.css('display', 'inline');
+        minimizeModal.css('display', 'none');
+
+        modalWrapper.css('padding', '5rem');
+        modalContent.css('width', '90%');
+        modalContent.css('border-radius', '30px');
+    })
+});
 
 const regionFill = {
     'region-xiii': '#019ec7',
@@ -122,7 +140,7 @@ function updateModal(modalWrapper, modalImage, modalDetails, region) {
     }
     languageBars = languageBars.join('');
 
-    modalDetails.append(`<img src="res/images/background.png" alt=""/>`);
+    modalDetails.append(`<img id="location-image" src="res/images/background.png" alt=""/>`);
     modalDetails.append(`<div class="modal-detail"><p class="detail-content-only">${tempRegionData["short-info"]}</p></div>`);
     modalDetails.append(`<div class="modal-detail"><p class="detail-name-large">Primary Languages<p class="detail-content">${languages}</p></div>`);
     // modalDetails.append('<hr />');

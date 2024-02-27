@@ -146,9 +146,51 @@ body {
   float: right;
 }
 
+#navbar {
+  top: 0;
+  position: absolute;
+  background-color: none;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3rem 0;
+  padding-left: 3rem;
+  img {
+    margin: auto;
+    height: 50px;
+  }
+}
+
+#navbar-buttons {
+  position: absolute;
+  float: left;
+  display: flex;
+  flex-direction: row;
+  //width: 50%;
+  //margin-right: auto;
+  button {
+    font-size: 2rem;
+    margin: 0 1rem;
+    padding: 1rem 2rem;
+    background-color: transparent;
+    border: none;
+    color: #fffee1;
+    text-decoration: underline transparent;
+  
+    &:hover {
+      cursor: pointer;
+      transition: 1s;
+      text-decoration-color: #fffee1;
+    }
+  }
+}
+
 #home {
   position: relative;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100%;
@@ -158,8 +200,13 @@ body {
 }
 
 #home-wrap {
+  height: 100%;
   width: 100%;
   padding: 0 10rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
 }
 
 #map {
@@ -235,6 +282,38 @@ footer {
   }
 }
 
+#minimize-modal {
+  display: none;
+}
+
+#minimize-modal,
+#maximize-modal {
+  border-radius: 50px;
+  color: white;
+  background-color: #00ac59;
+  height: 30px;
+  width: 30px;
+  border-color: transparent;
+  justify-content: center;
+  cursor: pointer;
+  text-align: center;
+  align-items: center;
+  float: right;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.4));
+
+  &:hover {
+    transition: 0.4s;
+    background-color: #002a0e;
+  }
+  svg {
+    vertical-align: middle;
+    margin: auto;
+    padding: 4px;
+    height: 25px;
+    width: 25px;
+  }
+}
+
 .modal-close {
   color: white;
   float: right;
@@ -242,12 +321,13 @@ footer {
   height: 30px;
   width: 30px;
   text-align: center;
-  line-height: 28px;
   font-weight: bold;
   flex-grow: 0;
   background-color: black;
   border-radius: 50px;
+  border: none;
   font-weight: 300;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.4));
 }
 
 .modal-close:hover,
@@ -323,6 +403,9 @@ footer {
 
 #top-content {
   padding-right: 5rem;
+  button {
+    margin: 0.3rem;
+  }
 }
 
 #center-content {
@@ -428,6 +511,10 @@ footer {
     border-radius: 30px;
     width: 100%;
   }
+}
+
+#location-image {
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.4));
 }
 
 #modal-image {
