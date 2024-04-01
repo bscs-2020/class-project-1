@@ -1,15 +1,114 @@
 $(document).ready(() => {
     let map = $('#map-svg');
+    //     <div class="member">
+    //     <div class="member-image"></div>
+    //     <span class="member-role"></span>
+    //     <span class="member-role"></span>
+    //   </div>
+    let navbarButtons = $('#navbar-buttons button');
+    for (let i = 0; i < navbarButtons.length; i++) {
+        let button = $(navbarButtons[i]);
+        console.log(button);
+        button.click(function () {
+
+            let id = button.attr('id');
+            if (id == 'team-button') {
+                navbarButtons.css('display', 'none');
+                $('#home-wrap').css('display', 'none');
+                $('#map').css('display', 'none');
+                $('#navbar-close').css('display', 'block');
+                $('#team-wrap').css('display', 'flex');
+                $('#logo-light').css('display', 'none');
+                $('#logo-dark').css('display', 'block');
+                let memberData = teamData.filter(m => m.team == 'developers');
+                console.log(memberData);
+                let members = [];
+                for (let j = 0; j < memberData.length; j++) {
+                    let name = memberData[j].name;
+                    let role = memberData[j].role;
+                    console.log(`${j}: Name: ${name}, Role: ${role}`)
+                    console.log(`<div class='member'><div class='member-image'></div><span class='member-name'>${name}</span><span class='member-role'>${role}</span></div>`);
+                    members[j] = `<div class='member'><div class='member-image'></div><span class='member-name'>${name}</span><span class='member-role'>${role}</span></div>`
+                }
+                console.log(members);
+                members = members.join('');
+                console.log(members);
+                $('#team-display').html(members);
+            }
+        })
+    }
+
+    $('#navbar-close').click(() => {
+        navbarButtons.css('display', 'block');
+        $('#home-wrap').css('display', 'flex');
+        $('#map').css('display', 'block');
+        $('#navbar-close').css('display', 'block');
+        $('#team-wrap').css('display', 'none');
+        $('#logo-light').css('display', 'block');
+        $('#logo-dark').css('display', 'none');
+    })
 
     let regions = map.children();
-    console.log(regions[1]);
+    let tooltip = $('#tooltip');
     regions.hover(
         // mouseenter
         function () {
-            $(this).appendTo(map);
+            let region = $(this);
+
+            let regionName = '';
+            let tempRegionName = region.attr('id').toString().split('-');
+
+            if (tempRegionName.length > 1) {
+                regionName = capitalizeFirstLetter(tempRegionName[0]) + '-' + tempRegionName[1].toUpperCase();
+            } else {
+                regionName = tempRegionName[0].toUpperCase();
+            }
+
+            let regionData_ = regionData.find(r => r.region == regionName);
+            $('#region-code').text(regionData_['region'].split('-').join(' '));
+            $('#region-name').text(regionData_['name']);
+            $('#area').text(`Area: ${regionData_['land-area']}`);
+            $('#barangays').text('Barangays: 9999');
+
+            let languages = regionData_["languages-spoken"];
+            languages = languages.split(',');
+            for (let i = 0; i < languages.length; i++) {
+                languages[i] = languages[i].trim();
+                languages[i] = `<span class="language">${languages[i]}</span>`;
+            }
+            languages = languages.join('');
+
+            $('#languages').html(languages);
+            console.log(`#map-svg`);
+            tooltip.css('display', 'flex');
+            let mapWrapperRect = $(`#map-svg`)[0].getBoundingClientRect();
+            let regionRect = $(this)[0].getBoundingClientRect();
+
+            let y = regionRect.top - mapWrapperRect.top - (tooltip.height() * 1.5);
+            if (mapWrapperRect.top <= 0 && y < 0) y = mapWrapperRect.top;
+            console.log(regionName)
+            console.log(parseInt($(this).css("border-top-width"), 10));
+            console.log(`RegionRect Top: ${regionRect.top}`);
+            console.log(`MapWrapperWrectTop: ${mapWrapperRect.top}`);
+            console.log(`Tooltip Height: ${tooltip.height()}`);
+            console.log(`y: ${y}`);
+            let x = regionRect.left + (regionRect.width / 2) - (tooltip.width() / 2) + mapWrapperRect.left;
+
+            // let marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            // marker.setAttribute('cx', clickedProvince[0].getBoundingClientRect().x + clickedProvince[0].getBoundingClientRect().width / 2);
+            // marker.setAttribute('cy', clickedProvince[0].getBoundingClientRect().y + clickedProvince[0].getBoundingClientRect().height / 2);
+            tooltip.css({
+                left: `${x}px`,
+                top: `${y}px`
+            });
+
+            console.log(`Tooltip Top: ${$('#tooltip')[0].getBoundingClientRect().top}`)
+
+            $(region).appendTo(map);
         },
         // mouseleave
         function () {
+            tooltip.css('display', 'none');
             //$(this).tooltip('disable');
         });
 
@@ -26,6 +125,7 @@ $(document).ready(() => {
         let region = $(this);
         currentRegionIndex = regions.index(region);
         updateModal(modalWrapper, modalImage, modalDetails, region);
+        modalWrapper.removeClass('out');
     });
 
     $('#next').click(() => {
@@ -39,7 +139,8 @@ $(document).ready(() => {
     })
 
     modalCloseButton.click(() => {
-        modalWrapper.css('display', 'none');
+        modalWrapper.addClass('out');
+        //modalWrapper.css('display', 'none');
     });
 
     $('#footer-close').click(() => {
@@ -48,28 +149,31 @@ $(document).ready(() => {
 
     let maximizeModal = $('#maximize-modal');
     let minimizeModal = $('#minimize-modal');
-    maximizeModal.click(() => {
+    maximizeModal.click((event) => {
         maximizeModal.css('display', 'none');
         minimizeModal.css('display', 'inline');
 
         modalWrapper.css('padding', '0');
         modalContent.css('width', '100%');
         modalContent.css('border-radius', '0');
+        updateMarker(event);
     });
 
-    minimizeModal.click(() => {
+    minimizeModal.click((event) => {
         maximizeModal.css('display', 'inline');
         minimizeModal.css('display', 'none');
         modalWrapper.css('padding', '5rem');
         modalContent.css('width', '90%');
         modalContent.css('border-radius', '30px');
+        updateMarker(event);
     })
 
     // Close modal if #modal-wrapper is clicked
     modalWrapper.click((event) => {
         // Check if the clicked element is #modal-wrapper or its children
         if (event.target.id === 'modal-wrapper') {
-            modalWrapper.css('display', 'none');
+            modalWrapper.addClass('out');
+            //modalWrapper.css('display', 'none');
         }
     });
 
@@ -116,6 +220,22 @@ const regionSvg = {
     'car': '<svg id="car" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 163.85 336.7"><defs><style>.cls-1{fill:#72bc1f;fill-rule:evenodd;}</style></defs><g id="car"><path id="ifugao" class="cls-1" d="M130.52,246.7l8.4-2.6c5.4-1.8,4.3,2.2,6.5-5.2,0-.1,.9-2.4,.9-2.4,3.3-6.3,6.7,.8,4.3-12.7-2-11.7-.8-15.5-28.2-10.7-3.5,.6-6.3,3.1-9.1,4.7l-6.8,2.4c-3.6,.7-27-1.9-28,2.1-4.6,2.2-3.7,.7-7.8,.6l-1.3,1.9c3.6,5.9-1.2,11.4-2.3,13.8-1.3,2.8-1.2,4.1-3.2,5.9-2.2,2-3.6,1.4-5.2,2.2-1.9,1.1,0-.3-1.5,1.3,4.1,4.9,1.5,5.5,1.5,12.2-.1,4.9-.4,12,.3,16.6,3.4,2,9.6,0,16.9-1.2,5.3-.9,12.6-2.6,18.9-2.7,4.7-.1,13.8-2.6,16.4-5.5,1-1.2,1.4-1.6,2.2-2.6l4.6-6.5c1.1-2.4-.1-2.3,1.2-4.4,2.1-3.3,1.8-1.5,5.1-3.4,3.3-1.7,1.5-4.1,6.2-3.8Z"/><path id="benguet" class="cls-1" d="M21.52,334.2s-.8,1.4,3.1,1.8c1.9,.2,3.6-.3,4.9-.6,.7-.2,1.4-.3,2-.4,.3-.1,1.9-.5,2.6-.7,1.4-.3,2.9-.5,5.1-.3-1.2-6.1-.9-6.2,1.8-10.9,3.4-6.1,1.2-5.8,9.4-5.8,3.6-11.4,5.4-4.7,5.3-22.5,0-5.5-.1-7.6,1.3-11.8,1.5-4.3-.3-14.9,.2-24.2,.8-15-1.2-8.8-5.2-14.1-1.1-1.5-1.2-4.1-2-5.5-.8-1.2-2.4-1.2-6.8-7.3-2.9,.7-4.1,1.9-6.3,2.2-3.6,.5-5-.2-8.5,.8-8,2.3-4.4,13-8.1,28.9-1.2,5-5.2,7.1-7.7,10.8-1.7,2.4-.9,8.4-6.1,11.5-3.1,1.9-2.4-.7-5.1,4.1-3.2,5.7,3.4,28.5,5.3,38.4,13.3,3.6,3.2,3.4,14.8,5.6Zm11.3,2l-.3,.4,.3-.4Zm-12.4,.5l-.3-.5,.3,.5Z"/><path id="mountain-province" class="cls-1" d="M90.12,194.5c-1-.2-3-1.9-3.1-2.6-2.2-.2-1,.2-2.7-.5-1-.4-2-1.3-2.2-1.5l-1.7-3-3.9-.2c-2.6-.7-4.5-.9-6.6-1.3-2.2-.4-4.1-.1-5.6-1.7l-3.3,.4c.3,2.6,.4,4.1-1.6,4.8,.1,3.2-8,2.7-8,3.6-.7,1.4,.5,0-.9,1-.7,.6-1.3,.8-1.9,1.4-7.7,8-4.6,20.2-4.2,24.5,.5,5.7-.1,6.6-1.5,10.8l7.4,6.8c3.3,2.9,.4,5.4,6,8.2,7,1.6,12.8-13.5,12.8-14.2,.3-4.8-2.9-6.1-.3-8.5,2.3-2.1,4.1-.9,7.2-.8,.6-.5,1.2-1,1.8-1.4,4.1-2.4,10.9-1.9,15.6-1.3,21.9,2.6,25.4-12.7,54.6-8.7,.1-4.8,.3-10.6,0-15.4-.4-7.4-2-5.2-.3-12.6-21.2-4.8-13.3-8.3-26.6-3-7,2.7-2.5,5.8-13.8,13-4.9,3.2-11.2,3.4-17.2,2.2Z"/><path id="kalinga" class="cls-1" d="M100.52,128.2c-3.6-2.6-8.9-6.8-13.3-5.4-3.1,7.5,9.9,14-6.4,20.5-4,1.6-7.3,3.8-8.2,8.5-.5,2.8-.1,5.1-.6,7.8-.1,.5-.7,2.5-1,3.2-2.5,5.3-5.4,11.4-8.2,16.9-.1,.2-.2,.4-.2,.5-.4,.8-.5,1.4-.7,1.7,4,.7,5.7,1.3,9.4,2,7.7,1.6,5.6,.3,9.9,1.9,2.8,1.1,1.9,2.1,3.4,3.5l3.8,2c10.4,5.3,18.5,.1,25.6-7.5,6.8-7.3-1.4-2.3,10-7.4,2-.9,3.2-1.7,5.2-1.5,2.4,.2,15,5.3,19.7,5.8l5-13.8c.1-.2,.2-.4,.2-.6,2.7-8.9,3.2-5,7.4-7.9,2.6-1.9,3.1-6.5,1.1-9.2-3.6-5-20.7-19.2-24.3-24.5-4.7-.3-5,2.2-6.2-3-2.6,1.7-4.8,2.4-5,6.5q-1.4,0-2.7-.2l-2-.5c-2.2-.7-2-1-4.4-1.7-3.3-1.1-7-1-9.7-2-.2,.3-1.5,2.7-1.6,2.7-2.1,1.3-.5,5.9-6.2,1.7Zm-30.6,57.2c2.1,.4,3.9,.7,6.6,1.3l-6.6-1.3Z"/><path id="apayao" class="cls-1" d="M103.12,127.7l1.4-1v-.4c.7-1.2,.1-.7,1-1.8,.9-1.2,.3-.5,1.3-1.4,2.3-1.2,9.4,.3,12.3,1.7l4.4,1.9,8.1-7.2c-1.9-3.4,1.1-2.8-7-12.2-1-1.2-.5-.8-1.7-1.7-2.2-1.9-3.4-1.3-7.8-1.3,.2-4.1,10.1-24.5,12.6-29.6,1.6-3.1,4.6-4.8,7.9-6.3,1.3-13,3.5-4.4,4-17.5,.3-10.1,1-8-2.7-17l-18.2-10.3c-4-1.7-4-.3-6.9-3.1-5.5-5.4-3.7-3.8-11.8-7.4-5.1-2.2-8.5-4.6-14.3-5l-.1-8.1-4.2,.4c-.1,.4-.2,.5-.3,.8l-1,2.4c-1.2,1.9-.1,.1-2.2,1.9-2.8,2.3-1.2,3.6-4.1,5.1-1.9,1-7.7,2.3-6.9,11.9,.3,2.9,1.5,4.2,1.4,6.5-.3,4.6-1.4,11.2,.5,16.9,5.3,15.9-3.1,5.3-3.3,18.5-.2,7.4-1.5,13.8,1.3,15.5,1.9,1.2,4.6,1.3,5.9,4.3,1,4.1-.2,12.5,3.6,13.8,1.9,.7,1.8-1.7,6-1,2.4,.5,4.3,2.7,5.7,3.7,.5,7,2.3,13.8,2.4,20.1,4.2,1.3,9.8,4.3,12.7,6.9Z"/><path id="abra" class="cls-1" d="M24.22,101.2c-6.1,1.9-8.1,1-10.2,7.1-2.4,7.1-2,4.3-4,8.8l-4.3,9.2c-2.6,5.2-2.6,11.1-3.7,13.8-1,2.6-.2-1.3-1.6,2.6-1.5,4.3,1.3,4.1,3.4,3.5,6.6-1.9,11,2.9,11.2,3.6,0,6.8,.3,7.5-3,12.1-1.2,1.6-2.4,2.8-2,5.3,1,6.6,5.5,5.3,10.1,5.3l6,6.5c5.5,5,0,4.5,3.2,14.5l12.1,1c.9-1.4,1.7-2.6,2.5-4,19,0,8.8,.7,15.9-3.1l.2-3.8c.1-2.7,.3-2.6,.8-4.8l.8-1c1.3-2.1,2-3.9,3.1-6,.5-1.1,1-2.2,1.6-3.4,1.5-3.3,.8-.3,1.3-3.8l.8-1c2.3-5.8,3-7.8,3-16.4,3.1-1.4,4.5-3.7,8.6-5.3,5.1-2,5.5-2.9,7.9-7-.9-2.6-1.5-2.2-2.3-5.1-.6-2.5-.8-4.2-1.5-6.4,1.5-1,2.5-1.8,4.5-2.8l-2.6-19.2c-.6-.6-3.1-2.4-4.1-2.6-2.8-.7-3.1,.6-5.7,1.2-5.1-2.9-5-6.3-5-13.7-1.5-3.2-3.9-4.4-6.8-5.8l-4.3,2.9c-13.2-5.7-10.4,2.4-16.2,5-1.6,.7-5.8,1.4-7.5,1.8-1.8,6.4-2.5,7.8-8.1,9.5l-4.1,1.5Z"/></g></svg>',
 };
 
+function updateMarker(event) {
+    //let markerElement = $('.marker');
+    //markerElement.css('display', 'none');
+    let modalImage = $('#modal-image');
+    var x = event.pageX - modalImage.offset().left;
+    var y = event.pageX - modalImage.offset().top;
+
+    let marker = $("<img src='res/images/pin.png' class='marker'>");
+    // Set the marker position
+    marker.css({
+        left: x,
+        top: y
+    });
+
+}
+
 function updateModal(modalWrapper, modalImage, modalDetails, region) {
     $('.marker').remove();
     modalDetails.html('');
@@ -132,11 +252,29 @@ function updateModal(modalWrapper, modalImage, modalDetails, region) {
     let tempRegionData = regionData.find(r => r.region == regionName);
 
     let languages = tempRegionData["languages-spoken"];
+    let languageResources = "";
+    let popularPhrases = "";
     languages = languages.split(',');
     for (let i = 0; i < languages.length; i++) {
-        languages[i] = `<span class="language-box">${languages[i].trim()}</span>`;
+        languages[i] = languages[i].trim();
+        if (i > 0) {
+            languageResources += '<br>';
+            popularPhrases += '<br>';
+        }
+        languageResources += `<strong>${languages[i]}</strong><br>`
+        popularPhrases += `<strong>${languages[i]}</strong><br>`;
+        languageData.filter(item => item["language"] === languages[i]).forEach(language => {
+            console.log(language);
+            languageResources += `<a href="https://${language.resource}" target="_blank">${language.resource}</a><br>`
+        })
+
+        phraseData.filter(item => item["language"] === languages[i]).forEach(phrase => {
+            popularPhrases += `${phrase.phrase} (${phrase.language}) - ${phrase.translation} (English Translation)<br>`
+        })
+        languages[i] = `<span class="language-box">${languages[i]}</span>`;
     }
     languages = languages.join('');
+
 
     let languageBars = tempRegionData["population-distribution"].split(',');
 
@@ -159,9 +297,29 @@ function updateModal(modalWrapper, modalImage, modalDetails, region) {
     // modalDetails.append('<hr />');
     modalDetails.append(`<div class="modal-detail column"><p class="detail-name full-width bottom-2-rem align-center">Population Distribution by Language</p><p class="detail-content full-width">${languageBars}</p></div>`);
     // modalDetails.append('<hr />');
-    modalDetails.append(`<div class="modal-detail"><p class="detail-name">Language Resources</p><p class="detail-content">${tempRegionData["language-resources"]}</p></div>`);
+    modalDetails.append(`<div class="modal-detail column dropdown"><p class="detail-name">Language Resources<span class="dropdown-indicator">+</span></p><p class="dropdown-content">${languageResources}</p></div>`);
+    modalDetails.append(`<div class="modal-detail column dropdown"><p class="detail-name">Popular Phrases<span class="dropdown-indicator">+</span></p><p class="dropdown-content">${popularPhrases}</p></div>`);
     $('#modal-left h1').html(regionName);
     $('#modal-left h2').html('');
+
+    let dropdowns = $('.dropdown');
+    dropdowns.each(function () {
+        let dropdown = $(this);
+        dropdown.click(function () {
+            console.log(dropdown);
+            console.log("fuck u");
+            dropdown.toggleClass('open');
+            console.log();
+            if (dropdown.hasClass('open')) {
+                dropdown.children()[0].children[0].innerText = '-'
+                dropdown.children('.dropdown-indicator').text('▲asdasd');
+            } else {
+                dropdown.children()[0].children[0].innerText = '+'
+                dropdown.children('.dropdown-indicator').text('▼fsdgdfgdf');
+            }
+        })
+    })
+
     let provinces = modalImage.children().children().children();
     provinces.each(function () {
         let province = $(this);
@@ -178,9 +336,10 @@ function updateModal(modalWrapper, modalImage, modalDetails, region) {
         province.click(function (event) {
             // Add marker
             $('.marker').css('display', 'none');
-            let grandparentOffset = $(this).parent().parent().parent().offset();
-            var x = event.pageX - grandparentOffset.left;
-            var y = event.pageY - grandparentOffset.top;
+            //let grandparentOffset = $(this).parent().parent().parent().offset();
+            let modalImage = $('#modal-image');
+            var x = event.pageX - modalImage.offset().left;
+            var y = event.pageY - modalImage.offset().top;
 
             let marker = $("<img src='res/images/pin.png' class='marker'>");
             // Set the marker position
@@ -245,6 +404,7 @@ function updateModal(modalWrapper, modalImage, modalDetails, region) {
             $('#modal-left h2').html(provinceName);
         })
     });
+    modalWrapper.addClass('active');
     modalWrapper.css('display', 'flex');
 }
 

@@ -74,9 +74,12 @@
         <nav id="navbar">
           <div id="navbar-buttons">
             <button>Introduction</button>
-            <button>Team</button>
+            <button id="team-button">Team</button>
+            <button id="languages-button">Languages</button>
+            <button id="navbar-close"><</button>
           </div>
-          <img src="res/images/logo-white.png" alt="" srcset="">
+          <img src="res/images/logo-white.png" alt="" srcset="" id="logo-light" />
+          <img src="res/images/logo-black.png" alt="" srcset="" id="logo-dark" />
         </nav>
         <img src="res/images/background.png" alt="" class="home-image" />
         <div id="home-wrap">
@@ -86,10 +89,30 @@
             <button id="start">Start</button>
           </a>
         </div>
+        <div id="team-wrap">
+          <span class="highlight-text">Meet the <strong><i>team.</i></strong></span>
+          <nav id="team-nav">
+            <input type="radio" name="team" id="devs" checked="checked">
+            <label for="devs">Developers</label>
+            <input type="radio" name="team" id="dqa">
+            <label for="dqa">Data Quality Assurance</label>
+            <input type="radio" name="team" id="wp">
+            <label for="wp">Writers & Publication</label>
+          </nav>
+          <div id="team-display">
+          </div>
+        </div>
       </section>
 
       <section id="map">
         <div id="map-wrapper">
+          <div class="tooltip" id="tooltip">
+            <span id="region-code"></span>
+            <span id="region-name"></span>
+            <span id="area"></span>
+            <span id="barangays"></span>
+            <div id="languages"></div>
+          </div>
           <svg
             version="1.2"
             baseProfile="tiny"

@@ -29,6 +29,10 @@ body {
   background-color: #fffee1;
 }
 
+svg {
+  cursor: default;
+}
+
 .marker {
   height: 32px;
   position: absolute;
@@ -53,6 +57,10 @@ body {
   flex-direction: column;
 }
 
+.row {
+  flex-direction: row;
+}
+
 .full-width {
   min-width: 100% !important;
 }
@@ -68,6 +76,124 @@ body {
   font-size: 3rem;
   min-width: 30%;
   max-width: 50%;
+}
+
+.dropdown {
+  min-width: 100%;
+  background-color: #c9d2c3;
+  border-radius: 25px;
+  padding: 2rem;
+  .detail-name {
+    min-width: 100%;
+  }
+
+  &.open {
+    .dropdown-content {
+      display: block;
+      font-size: 1.75rem;
+    }
+  }
+}
+
+#team-display {
+  display: flex;
+  gap: 5rem;
+}
+
+.member {
+  background-color: #FF9900;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 35rem;
+  height: 45rem;
+  border-radius: 20px;
+}
+
+.member-image {
+  border-radius: 20px 20px 0 0;
+  width: 100%;
+  background-color: #002a0e;
+  height: 38rem;
+}
+
+.member-name {
+  color: black;
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.member-role {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: normal;
+}
+
+#logo-dark {
+  display: none;
+}
+
+#tooltip {
+  background-color: rgba(255, 255, 255, 1);
+  position: absolute;
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+  border-radius: 15px;
+  padding: 1.5rem;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  filter: drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.4));
+}
+
+#region-code {
+  color: black;
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+#region-name {
+  color: black;
+  font-size: 1.3rem;
+}
+
+#area,
+#barangays {
+  color: grey;
+  font-size: 1.3rem;
+}
+
+#area {
+  padding-top: 1rem;
+}
+
+#barangays {
+  padding-bottom: 1rem;
+}
+
+#languages span {
+  background-color: #002a0e;
+  color: #ffffff;
+  font-size: 1rem;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  //margin-left: 5rem;
+  margin: 0 0.5rem;
+  display: inline-block;
+  border-radius: 10px;
+  font-weight: normal;
+}
+
+.dropdown-indicator {
+  float: right;
+}
+
+.dropdown-content {
+  display: none;
+  font-weight: normal;
+  min-width: 100%;
+  padding-top: 2rem;
 }
 
 .bottom-2-rem {
@@ -157,6 +283,7 @@ body {
   justify-content: space-between;
   padding: 3rem 0;
   padding-left: 3rem;
+  z-index: 100;
   img {
     margin: auto;
     height: 50px;
@@ -168,6 +295,7 @@ body {
   float: left;
   display: flex;
   flex-direction: row;
+  vertical-align: center;
   //width: 50%;
   //margin-right: auto;
   button {
@@ -178,11 +306,24 @@ body {
     border: none;
     color: #fffee1;
     text-decoration: underline transparent;
-  
+
     &:hover {
       cursor: pointer;
       transition: 1s;
       text-decoration-color: #fffee1;
+    }
+  }
+
+  #navbar-close {
+    color: #002a0e;
+    display: none;
+    font-weight: bold;
+    font-size: 2rem;
+    margin: 0 1rem;
+    padding: 1rem 2rem;
+    cursor: pointer;
+    &:hover {
+      text-decoration: none;
     }
   }
 }
@@ -210,8 +351,8 @@ body {
 }
 
 #map {
-  padding: 5rem 0;
-  background-color: #fffee1;
+  padding: 0;
+  background-color: white;
 }
 
 .home-image {
@@ -265,6 +406,44 @@ section {
     font-size: 3rem;
     font-weight: normal;
   }
+}
+
+#team-wrap {
+  background-color: #FFFEE1;
+  display: none;
+  flex-direction: column;
+  gap: 5rem;
+  height: 100vh;
+  width: 100vw;
+  z-index: 2;
+  align-items: center;
+  justify-content: center;
+}
+
+#team-nav {
+  display: flex;
+  color: black;
+  label {
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 2.5rem;
+    font-weight: bold;
+    padding: 1rem 2rem;
+  }
+  input {
+    display: none;
+    &:checked + label {
+      font-weight: normal;
+      color: #FFFEE1;
+      background-color: #002A0E;
+    }
+  }
+}
+
+.highlight-text {
+  color: black;
+  display: block;
+  font-size: 6rem;
 }
 
 footer {
@@ -342,9 +521,10 @@ footer {
 #map-wrapper {
   display: flex;
   width: 100vw;
-  height: 95vh;
+  height: 100%;
   align-items: center;
   position: relative;
+  z-index: 100;
 }
 
 #map-svg {
@@ -371,7 +551,6 @@ footer {
   padding: 5rem;
   display: none;
   flex-direction: column;
-  z-index: 1;
   position: fixed;
   left: 0;
   top: 0;
@@ -385,6 +564,16 @@ footer {
   align-items: center;
   h1 {
     font-size: 4rem;
+  }
+  // transform: scaleY(0.01);
+  // animation: unfoldIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  transform: scale(0);
+  animation: zoomIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  &.out {
+    animation: zoomOut 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+
+    // transform: scale(1);
+    // animation: unfoldOut 1s 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
   }
 }
 
@@ -668,21 +857,108 @@ footer {
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 20px;
+  width: 15px;
 }
 
 ::-webkit-scrollbar-track {
   background-color: transparent;
-  margin: 2.5rem 0;
+  margin: 1rem 0;
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: #d6dee1;
-  border-radius: 20px;
+  border-radius: 10px;
   border: 6px solid transparent;
   background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background-color: #a8bbbf;
+}
+
+@media (max-width: 575.98px) {
+}
+
+// Small devices (landscape phones, less than 768px)
+@media (max-width: 767.98px) {
+}
+
+// Medium devices (tablets, less than 992px)
+@media (max-width: 991.98px) {
+  html {
+    font-size: 20px;
+  }
+}
+
+// Large devices (desktops, less than 1200px)
+@media (max-width: 1199.98px) {
+  html {
+    font-size: 20px;
+  }
+}
+
+// X-Large devices (large desktops, less than 1400px)
+@media (max-width: 1399.98px) {
+  html {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 1599.98px) {
+  html {
+    font-size: 7px;
+  }
+}
+
+@keyframes unfoldIn {
+  0% {
+    transform: scaleY(0.005) scaleX(0);
+  }
+  50% {
+    transform: scaleY(0.005) scaleX(1);
+  }
+  100% {
+    transform: scaleY(1) scaleX(1);
+  }
+}
+
+@keyframes unfoldOut {
+  0% {
+    transform: scaleY(1) scaleX(1);
+  }
+  50% {
+    transform: scaleY(0.005) scaleX(1);
+  }
+  100% {
+    transform: scaleY(0.005) scaleX(0);
+  }
+}
+
+@keyframes zoomIn {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes zoomOut {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
+@keyframes sweep {
+  from {
+    opacity: 0;
+    margin-top: -10px;
+  }
+  to {
+    opacity: 1;
+    margin-top: 0;
+  }
 }
